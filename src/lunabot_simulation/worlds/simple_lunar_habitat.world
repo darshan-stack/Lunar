@@ -1,0 +1,259 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="simple_lunar_habitat">
+    
+    <!-- Lunar Physics -->
+    <physics name="default_physics" default="0" type="ode">
+      <gravity>0 0 -1.62</gravity> <!-- Lunar gravity -->
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>10</iters>
+          <sor>1.3</sor>
+        </solver>
+        <constraints>
+          <cfm>0</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>100</contact_max_correcting_vel>
+          <contact_surface_layer>0.001</contact_surface_layer>
+        </constraints>
+      </ode>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <max_step_size>0.001</max_step_size>
+    </physics>
+
+    <!-- Harsh lunar sunlight -->
+    <light name="sun" type="directional">
+      <cast_shadows>1</cast_shadows>
+      <pose>-10 5 20 0 0 0</pose>
+      <diffuse>0.9 0.9 0.8 1</diffuse>
+      <specular>0.8 0.8 0.7 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>0.5 -0.2 -0.9</direction>
+    </light>
+
+    <!-- Lunar surface (dark gray) -->
+    <model name="lunar_ground">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>200 200</size>
+            </plane>
+          </geometry>
+          <surface>
+            <contact>
+              <collide_bitmask>65535</collide_bitmask>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.1</mu>  <!-- Low friction lunar dust -->
+                <mu2>0.1</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <cast_shadows>false</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>200 200</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.2 0.2 0.2 1</ambient>  <!-- Dark lunar surface -->
+            <diffuse>0.3 0.3 0.3 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Cylindrical Lunar Habitat -->
+    <model name="lunar_habitat">
+      <static>true</static>
+      <pose>15 0 2 0 1.57 0</pose> <!-- Horizontal cylinder -->
+      <link name="habitat_link">
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>2</radius>
+              <length>10</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.9 1</ambient>
+            <diffuse>0.9 0.9 1.0 1</diffuse>
+            <specular>0.4 0.4 0.4 1</specular>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>2</radius>
+              <length>10</length>
+            </cylinder>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- Solar Panel Array -->
+    <model name="solar_panels">
+      <static>true</static>
+      <pose>-8 -6 1 0 0.3 0</pose>
+      <link name="panel_link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>6 3 0.1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.1 0.1 0.4 1</ambient>
+            <diffuse>0.2 0.2 0.6 1</diffuse>
+            <specular>0.7 0.7 0.7 1</specular>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>6 3 0.1</size>
+            </box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- Large Crater -->
+    <model name="main_crater">
+      <static>true</static>
+      <pose>-15 10 -2 0 0 0</pose>
+      <link name="crater_link">
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>6</radius>
+              <length>4</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.15 0.15 0.15 1</ambient>
+            <diffuse>0.2 0.2 0.2 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>6</radius>
+              <length>4</length>
+            </cylinder>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- Communication Dish -->
+    <model name="comm_dish">
+      <static>true</static>
+      <pose>8 -12 3 0 0.2 0</pose>
+      <link name="dish_link">
+        <visual name="visual">
+          <geometry>
+            <sphere>
+              <radius>1.5</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.9 0.9 0.9 1</specular>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <sphere>
+              <radius>1.5</radius>
+            </sphere>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- Small craters -->
+    <model name="small_crater_1">
+      <static>true</static>
+      <pose>5 8 -0.3 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>1.5</radius>
+              <length>0.6</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.18 0.18 0.18 1</ambient>
+            <diffuse>0.25 0.25 0.25 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>1.5</radius>
+              <length>0.6</length>
+            </cylinder>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- Lunar rocks -->
+    <model name="lunar_rocks">
+      <static>true</static>
+      <pose>-3 5 0.5 0 0 0.5</pose>
+      <link name="rock_link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>2 1.5 1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.25 0.25 0.25 1</ambient>
+            <diffuse>0.35 0.35 0.35 1</diffuse>
+            <specular>0.15 0.15 0.15 1</specular>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>2 1.5 1</size>
+            </box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- ROS Plugins -->
+    <plugin name="gazebo_ros_state" filename="libgazebo_ros_state.so">
+      <ros>
+        <namespace>/gazebo</namespace>
+      </ros>
+      <update_rate>1.0</update_rate>
+    </plugin>
+
+    <plugin name="gazebo_ros_factory" filename="libgazebo_ros_factory.so" />
+
+  </world>
+</sdf>
