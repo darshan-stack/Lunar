@@ -1,0 +1,175 @@
+#!/usr/bin/env python3
+
+def create_bright_lunar_world():
+    """Create bright, visible lunar world"""
+    
+    bright_world = '''<?xml version="1.0" ?>
+<sdf version="1.7">
+  <world name="bright_lunar_environment">
+    
+    <!-- Lunar Physics -->
+    <physics name="lunar_physics" default="1" type="ode">
+      <gravity>0 0 -1.62</gravity>
+    </physics>
+
+    <!-- BRIGHT LIGHTING SYSTEM -->
+    <light name="main_sun" type="directional">
+      <cast_shadows>1</cast_shadows>
+      <pose>100 50 200 0 0 0</pose>
+      <diffuse>3.0 3.0 2.8 1</diffuse>
+      <specular>2.5 2.5 2.3 1</specular>
+      <direction>-0.5 -0.3 -0.8</direction>
+    </light>
+    
+    <!-- Fill light for visibility -->
+    <light name="fill_light_1" type="directional">
+      <cast_shadows>0</cast_shadows>
+      <pose>-100 -50 150 0 0 0</pose>
+      <diffuse>1.5 1.5 1.5 1</diffuse>
+      <direction>0.5 0.3 -0.5</direction>
+    </light>
+    
+    <!-- Additional ambient lighting -->
+    <light name="ambient_boost" type="directional">
+      <cast_shadows>0</cast_shadows>
+      <pose>0 0 100 0 0 0</pose>
+      <diffuse>1.0 1.0 1.0 1</diffuse>
+      <direction>0 0 -1</direction>
+    </light>
+
+    <!-- BRIGHT SCENE SETTINGS -->
+    <scene>
+      <ambient>0.3 0.3 0.3 1</ambient>
+      <background>0.05 0.05 0.1 1</background>
+      <shadows>1</shadows>
+    </scene>
+
+    <!-- VISIBLE LUNAR TERRAIN -->
+    <model name="bright_lunar_surface">
+      <static>true</static>
+      <pose>0 0 0 0 0 0</pose>
+      <link name="surface_link">
+        <collision name="collision">
+          <geometry>
+            <heightmap>
+              <uri>/home/darshan/lunar/src/lunabot_simulation/media/materials/heightmaps/lunar_heightmap_fixed.png</uri>
+              <size>400 400 20</size>
+              <pos>0 0 0</pos>
+            </heightmap>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.8</mu>
+                <mu2>0.8</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        
+        <visual name="visual">
+          <cast_shadows>1</cast_shadows>
+          <geometry>
+            <heightmap>
+              <uri>/home/darshan/lunar/src/lunabot_simulation/media/materials/heightmaps/lunar_heightmap_fixed.png</uri>
+              <size>400 400 20</size>
+              <pos>0 0 0</pos>
+              <texture>
+                <diffuse>/home/darshan/lunar/src/lunabot_simulation/media/materials/textures/lunar_surface.jpg</diffuse>
+                <size>30</size>
+              </texture>
+            </heightmap>
+          </geometry>
+          <material>
+            <ambient>0.4 0.4 0.4 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- VISIBLE OBSTACLES -->
+    <model name="bright_crater">
+      <static>true</static>
+      <pose>30 20 0 0 0 0</pose>
+      <link name="crater_link">
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>5</radius>
+              <length>2</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <pose>0 0 -1 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>5</radius>
+              <length>2</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.2 0.2 0.2 1</ambient>
+            <diffuse>0.4 0.4 0.4 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="bright_rock">
+      <static>true</static>
+      <pose>-20 15 2 0 0 0</pose>
+      <link name="rock_link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>4 3 3</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>4 3 3</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ROS INTEGRATION -->
+    <plugin name="gazebo_ros_state" filename="libgazebo_ros_state.so">
+      <ros>
+        <namespace>/gazebo</namespace>
+      </ros>
+      <update_rate>10.0</update_rate>
+    </plugin>
+
+    <plugin name="gazebo_ros_factory" filename="libgazebo_ros_factory.so" />
+
+    <!-- CAMERA SETTINGS FOR BETTER VIEW -->
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>20 -20 15 0 0.3 0.785</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+
+  </world>
+</sdf>'''
+
+    # Save bright world
+    with open('/home/darshan/lunar/src/lunabot_simulation/worlds/bright_lunar.world', 'w') as f:
+        f.write(bright_world)
+    
+    print("✅ Bright lunar world created!")
+
+if __name__ == "__main__":
+    create_bright_lunar_world()

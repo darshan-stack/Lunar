@@ -1,0 +1,78 @@
+{
+  "source_image": "/home/darshan/lunar/lunar_surface.jpg",
+  "terrain_size": "1280x720 pixels",
+  "elevation_range": "0.2 - 29.4 meters",
+  "detected_features": {
+    "craters": 514,
+    "rocks": 5
+  },
+  "crater_details": [
+    {
+      "x": 376,
+      "y": 426,
+      "radius": 99,
+      "depth": 9.9
+    },
+    {
+      "x": 750,
+      "y": 574,
+      "radius": 99,
+      "depth": 9.9
+    },
+    {
+      "x": 838,
+      "y": 452,
+      "radius": 99,
+      "depth": 9.9
+    },
+    {
+      "x": 1090,
+      "y": 434,
+      "radius": 99,
+      "depth": 9.9
+    },
+    {
+      "x": 1146,
+      "y": 500,
+      "radius": 99,
+      "depth": 9.9
+    }
+  ],
+  "rock_details": [
+    {
+      "x": 800,
+      "y": 713,
+      "width": 20,
+      "height": 13,
+      "elevation": 0.26
+    },
+    {
+      "x": 994,
+      "y": 702,
+      "width": 43,
+      "height": 35,
+      "elevation": 1.5050000000000001
+    },
+    {
+      "x": 877,
+      "y": 674,
+      "width": 8,
+      "height": 15,
+      "elevation": 0.12
+    },
+    {
+      "x": 862,
+      "y": 665,
+      "width": 20,
+      "height": 19,
+      "elevation": 0.38
+    },
+    {
+      "x": 1266,
+      "y": 545,
+      "width": 28,
+      "height": 14,
+      "elevation": 0.392
+    }
+  ]
+}
