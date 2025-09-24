@@ -1,0 +1,180 @@
+<?xml version="1.0" ?>
+<sdf version="1.7">
+  <world name="nasa_lunar_environment">
+    
+    <!-- NASA Lunar Physics -->
+    <physics name="lunar_physics" default="1" type="ode">
+      <gravity>0 0 -1.62</gravity>
+      <ode>
+        <solver>
+          <type>world</type>
+          <iters>500</iters>
+          <sor>1.4</sor>
+        </solver>
+        <constraints>
+          <cfm>1e-8</cfm>
+          <erp>0.3</erp>
+          <contact_max_correcting_vel>100</contact_max_correcting_vel>
+          <contact_surface_layer>0.001</contact_surface_layer>
+        </constraints>
+      </ode>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <max_step_size>0.001</max_step_size>
+    </physics>
+    
+    <!-- Lunar Lighting (Harsh Sun + Earth Reflection) -->
+    <light name="harsh_lunar_sun" type="directional">
+      <cast_shadows>1</cast_shadows>
+      <pose>500 200 800 0 0 0</pose>
+      <diffuse>5.0 5.0 4.8 1</diffuse>
+      <specular>4.0 4.0 3.8 1</specular>
+      <attenuation>
+        <range>5000</range>
+        <constant>0.8</constant>
+        <linear>0.001</linear>
+        <quadratic>0.0001</quadratic>
+      </attenuation>
+      <direction>-0.7 -0.3 -0.9</direction>
+    </light>
+    
+    <light name="earth_shine" type="directional">
+      <cast_shadows>0</cast_shadows>
+      <pose>-400 -200 600 0 0 0</pose>
+      <diffuse>0.3 0.4 0.5 1</diffuse>
+      <direction>0.5 0.4 -0.6</direction>
+    </light>
+    
+    <!-- Space Environment -->
+    <scene>
+      <ambient>0.01 0.01 0.01 1</ambient>
+      <background>0.0 0.0 0.0 1</background>
+      <shadows>1</shadows>
+      <fog>
+        <color>0.0 0.0 0.0 1</color>
+        <type>none</type>
+      </fog>
+      <sky>
+        <clouds>
+          <speed>0</speed>
+        </clouds>
+      </sky>
+    </scene>
+    
+    <!-- NASA DEM-Based Lunar Terrain -->
+    <model name="nasa_lunar_terrain">
+      <static>true</static>
+      <pose>0 0 0 0 0 0</pose>
+      <link name="terrain_link">
+        <collision name="terrain_collision">
+          <geometry>
+            <heightmap>
+              <uri>file:///home/darshan/lunar/media/materials/heightmaps/nasa_lunar_dem.png</uri>
+              <size>800 800 50</size>
+              <pos>0 0 0</pos>
+            </heightmap>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.6</mu>
+                <mu2>0.6</mu2>
+                <slip1>0.05</slip1>
+                <slip2>0.05</slip2>
+                <fdir1>0 0 0</fdir1>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <soft_cfm>1e-10</soft_cfm>
+                <soft_erp>0.3</soft_erp>
+                <kp>1e+15</kp>
+                <kd>1e+5</kd>
+                <max_vel>0.01</max_vel>
+                <min_depth>0</min_depth>
+              </ode>
+            </contact>
+            <bounce>
+              <restitution_coefficient>0.02</restitution_coefficient>
+              <threshold>1e+06</threshold>
+            </bounce>
+          </surface>
+        </collision>
+        
+        <visual name="terrain_visual">
+          <cast_shadows>1</cast_shadows>
+          <geometry>
+            <heightmap>
+              <uri>file:///home/darshan/lunar/media/materials/heightmaps/nasa_lunar_dem.png</uri>
+              <size>800 800 50</size>
+              <pos>0 0 0</pos>
+              <texture>
+                <diffuse>file:///home/darshan/lunar/media/materials/textures/nasa_lunar_surface.jpg</diffuse>
+                <size>50</size>
+              </texture>
+            </heightmap>
+          </geometry>
+          <material>
+            <ambient>0.05 0.05 0.05 1</ambient>
+            <diffuse>0.4 0.4 0.4 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <emissive>0.0 0.0 0.0 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+    
+    <!-- Lunar Boulders -->
+    <model name="lunar_boulder_field_1">
+      <static>true</static>
+      <pose>50 30 5 0.1 0.2 0.5</pose>
+      <link name="boulder_link">
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>model://boulder_cluster</uri>
+              <scale>3 2 3</scale>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>model://boulder_cluster</uri>
+              <scale>3 2 3</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient>0.1 0.1 0.1 1</ambient>
+            <diffuse>0.3 0.3 0.3 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+    
+    <!-- ROS2 Integration Plugins -->
+    <plugin name="gazebo_ros_state" filename="libgazebo_ros_state.so">
+      <ros>
+        <namespace>/gazebo</namespace>
+      </ros>
+      <update_rate>50.0</update_rate>
+    </plugin>
+    
+    <plugin name="gazebo_ros_factory" filename="libgazebo_ros_factory.so" />
+    
+    <!-- Camera View Configuration -->
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>60 -60 40 0 0.3 0.785</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+        <track_visual>
+          <name>nasa_lunar_rover</name>
+          <min_dist>5</min_dist>
+          <max_dist>200</max_dist>
+        </track_visual>
+      </camera>
+    </gui>
+    
+  </world>
+</sdf>
